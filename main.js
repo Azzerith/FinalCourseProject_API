@@ -7,10 +7,8 @@ async function process_argv() {
 }
 
 async function getStudentActivities() {
-    const response = await fetch('http://localhost:3001/activities')
-        .then((response) => {
-            return response.json();
-        });
+    const response = await fetch('http://localhost:3001/activities');
+    return response.json();
     // TODO: replace this
 }
 
@@ -32,7 +30,7 @@ async function studentActivitiesRegistration(data) {
 async function addStudent(name, day) {
     const activities = await getStudentActivities();
     const filterActivities = activities.filter(activity => activity.days.includes(day));
-    await fetch("http://localhost:3001/students", {
+    const response = await fetch("http://localhost:3001/students", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
