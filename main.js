@@ -24,7 +24,16 @@ async function studentActivitiesRegistration(data) {
 }
 
 async function addStudent(name, day) {
-    return {}; // TODO: replace this
+    fetch("http://localhost:3001/students", {
+        method: "POST",
+        body: {
+            "name": name,
+            "day": day
+        }
+    }).then((response) => response.json).then((json) => {
+        return { json }
+    });
+    // TODO: replace this
 }
 
 async function deleteStudent(id) {
