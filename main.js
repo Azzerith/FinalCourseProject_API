@@ -7,44 +7,56 @@ async function process_argv() {
 }
 
 async function getStudentActivities() {
-    fetch('http://localhost:3001/activities')
-        .then((response) => response.json)
-        .then((json) => {
-            return [json]
+    const response = await fetch('http://localhost:3001/activities')
+        .then((response) => {
+            return response.json();
         });
     // TODO: replace this
 }
 
 async function studentActivitiesRegistration(data) {
+    const method = data[0];
     //mendaftarkan
-
-    //menghapus
-
-    return 0; // TODO: replace this
+    if (method === "CREATE") {
+        const result = await addStudent(data[1], data[2]);
+        return result;
+    } else if (method === "DELETE") {
+        const message = await deleteStudent(data[1]);
+        return message; //menghapus 
+    } else {
+        return "Method tak sesuai"
+    }
+    // TODO: replace this
 }
 
 async function addStudent(name, day) {
-    fetch("http://localhost:3001/students", {
+    const activities = await getStudentActivities();
+    const filterActivities = activities.filter(activity => activity.days.includes(day));
+    await fetch("http://localhost:3001/students", {
         method: "POST",
-        body: {
-            "name": name,
-            "day": day
-        }
-    }).then((response) => response.json).then((json) => {
-        return { json }
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: name,
+            activities: filterActivities.map(activity => ({
+                name: activity.name,
+                desc: activity.desc
+            }))
+        })
     });
+    return await response.json();
     // TODO: replace this
 }
 
 async function deleteStudent(id) {
-    fetch("http://localhost:3001/students", {
+    await fetch(`http://localhost:3001/students/${id}`, {
         method: "DELETE",
-        body: {
-            "id": id
+        headers: {
+            "Content-Type": "application/json"
         }
-    }).then((response) => response.json).then((json) => {
-        return { json }
     });
+    return { message: `Successfully deleted student data with id ${id}` };
     // TODO: replace this
 }
 
