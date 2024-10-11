@@ -37,7 +37,15 @@ async function addStudent(name, day) {
 }
 
 async function deleteStudent(id) {
-    return {}; // TODO: replace this
+    fetch("http://localhost:3001/students", {
+        method: "DELETE",
+        body: {
+            "id": id
+        }
+    }).then((response) => response.json).then((json) => {
+        return { json }
+    });
+    // TODO: replace this
 }
 
 process_argv()
